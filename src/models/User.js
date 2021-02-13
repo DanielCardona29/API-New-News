@@ -6,8 +6,8 @@ import bcrypt from 'bcryptjs';
 // Nuevo Schema para el registro del usuario
 const userSchema = new Schema({
     // Le damos la propiedad de unico a el nombre 
-    // y el Correo
-    name: ({
+    // y el Corrfeo
+    user: ({
         type: String,
         unique: true,
 

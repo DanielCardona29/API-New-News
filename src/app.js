@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import pkg from '../package.json';
 
 //Importamos las rutas de los Usuarios}
-import UsersRoutes from './routes/user.routes.js';
+import AuthRoute from './routes/auth.routes';
 
 //Importamos el creador de roles 
 import {
@@ -35,8 +35,8 @@ app.get('/', (req, res) => {
     });
 });
 
-//Usamos las rutas de los usuarios
-app.use('/users', UsersRoutes);
+//Usamos las rutas para utentificar los usuarios
+app.use('/auth', AuthRoute);
 
 //Aprender Express Validations
 export default app;
