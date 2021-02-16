@@ -4,7 +4,7 @@
     "description": "Aplicacion de prueba",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest --watch",
         "start": "babel-node src/index.js",
         "dev": "nodemon src/index.js --exec babel-node",
         "build": "babel src --out-dir dist"
@@ -13,11 +13,13 @@
     "author": "Daniel Cardona",
     "license": "ISC",
     "dependencies": {
+        "@shelf/jest-mongodb": "^1.2.3",
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "cross-env": "^7.0.3",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
+        "express-validator": "^6.9.2",
         "helmet": "^4.3.1",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.11.9",
@@ -28,6 +30,7 @@
         "@babel/core": "^7.12.10",
         "@babel/node": "^7.12.10",
         "@babel/preset-env": "^7.12.11",
+        "jest": "^26.6.3",
         "nodemon": "^2.0.6"
     }
 }

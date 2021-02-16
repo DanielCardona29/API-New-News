@@ -1,6 +1,10 @@
 import User from '../models/User.js';
 import Role from '../models/Role.js';
 
+import ErrorController from './error.controller';
+
+const _ErrorController = new ErrorController();
+
 export default class UserController {
     constructor() { };
 
@@ -26,5 +30,17 @@ export default class UserController {
         }
     }
 
-
+    //Encontrar un usuario por id
+    async findUserByID(req, res, next) {
+        try {
+            console.log(req.userid);
+            const userFound = await User.findOne({ _id: req.userid }, {pass: 0, _id: 0}).populate("roles");
+            if (!userFound) {
+                return _ErrorController.AuthErrorResponse(res, 1001)
+            }
+            return res.status(200).json({ result: userFound });
+        } catch (error) {
+            return _ErrorController.AuthErrorResponse(res, 'default')
+        }
+    };
 }

@@ -2,15 +2,17 @@
 import { Router } from 'express';
 
 //Importamos el controlador de los usuarios
-import user_Controller from '../controllers/user.controller';
+import UserController from '../controllers/user.controller';
+import TokenController from '../controllers/token.controller';
 
 
-const user_ControllerVar = new user_Controller();
+const _UserController = new UserController();
+const _TokenController = new TokenController();
 
 //Iniciamos el Router
 const router = Router();
 
-//Crear un usuario
-router.get('/', user_ControllerVar.findUsersList)
+//Obtener la informacion de un usuario
+router.get('/', [_TokenController.verifyToken], _UserController.findUserByID)
 
 export default router;

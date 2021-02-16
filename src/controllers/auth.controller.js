@@ -7,7 +7,6 @@ import UserController from './user.controller'
 import TokenController from './token.controller'
 import ErrorController from './error.controller'
 
-//
 const _UserController = new UserController();
 const _TokenController = new TokenController();
 const _ErrorController = new ErrorController();
@@ -15,58 +14,62 @@ const _ErrorController = new ErrorController();
 //Esta Clase se ejecuta para validar nuestros inicios de sesion
 class AuthController {
 
-
     //Inciar sesion
     async signIn(req, res) {
         const { user, pass } = req.body;
+
+        console.log(req.body);
         //Validamos que recibimos los datos
         if (user, pass) {
 
             const userFound = await _UserController.userFounder(user);
             //Primero validamos el que usuairo no exista en la base de datos
             if (!userFound) {
-                console.log('hola');
-                return _ErrorController.ErrorResponse(res, 1001);
+                return _ErrorController.AuthErrorResponse(res, 1001);
             } else {
 
                 //Comparamos las contraseñas 
                 const machPass = await User.compareCryptPass(pass, userFound.pass);
                 if (!machPass) {
                     //Si la contraseña no coincide envimaos un error
-                    return res.status(401).json({
-                        message: 'no pass valid',
-                        _token: null
-                    });
+                    return _ErrorController.AuthErrorResponse(res, 1002);
                 } else {
-                    //1. Creamos el token
-                    console.log(userFound._id);
+                    //Creamos el token
                     const _token = await _TokenController.createToken(userFound._id);
+
                     //Enviamos al usuario
                     return res.status(201).json({ value: true, _token });
                 };
 
             };
         } else {
-            res.status(406).json({ message: 'no data', value: false })
+            return _ErrorController.AuthErrorResponse(res, 1003)
         };
 
     };
 
-    //Iniciar Sesion
+    //Registrarse
     async signUp(req, res) {
         const { user, email, pass, roles } = req.body;
-
+        console.log(req.body);
         //Primero verificamos los datos que recibimos los datos necesarios
-        if (!user, !email, !pass) {
-            return res.status(406).json({ message: 'no data', value: false })
+        if (!user || !email || !pass) {
+            return _ErrorController.AuthErrorResponse(res, 1003)
         }
-        //Verificamos si nuestro usuario existe en la base de datos
 
+        //Verificamos si nuestro usuario existe en la base de datos
         const _userFounder = await _UserController.userFounder(user);
-        console.log(_userFounder);
+
         if (_userFounder) {
-            return res.status(406).json({ message: 'El usuario se encuentra registrado en la base de datos' })
+            return _ErrorController.AuthErrorResponseSignup(res, 1004);
         }
+
+        //Verificamos si el correo existe en la base de datos
+        const _emialFounder = await _UserController.emailVerify(email);
+        if (_emialFounder) {
+            return _ErrorController.AuthErrorResponseSignup(res, 1005);
+        }
+
         //Creamos el usuairo en el Schema
         const NewUser = new User({
             user,
@@ -86,7 +89,7 @@ class AuthController {
                 NewUser.roles = foundRole.map(role => role.id);
 
             } catch (error) {
-                return res.status(500).json({ message: 'No rol found', value: false });
+                return _ErrorController.AuthErrorResponseSignup(res, 1006);
             }
 
         } else {
@@ -94,20 +97,24 @@ class AuthController {
                 const role = await Role.findOne({ name: 'user' });
                 NewUser.roles = [role._id];
             } catch (error) {
-                return res.status(500).json({ message: `Error desconocido intente nueva mente ${error.code}` })
+
+                return _ErrorController.AuthErrorResponse(res, 'default');
+
             }
         }
-        //Capturamos nuestros casos de error
 
+        //Capturamos nuestros casos de error
         try {
             //guardamos nuestro nuevo usuario
             const SavedUser = await NewUser.save();
             // Creamos el token del usuario
-            const _token = await this.tokenCreator(SavedUser.id);
+            const _token = await _TokenController.createToken(SavedUser.id);
             //Enviamos el token al usuario
-            res.status(200).json({ value: true, _token });
+            res.status(201).json({ value: true, _token });
+
         } catch (error) {
-            res.status(500).json({ message: `Error al crear usuario ${error.code}`, value: false });
+            console.log(error);
+            return _ErrorController.AuthErrorResponseSignup(res, 1007)
         }
     };
 

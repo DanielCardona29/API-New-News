@@ -8,6 +8,8 @@ import pkg from '../package.json';
 //Importamos las rutas de los Usuarios}
 import AuthRoute from './routes/auth.routes';
 
+//importamos las rutas de los usuarios
+import UserRoute from './routes/user.routes';
 //Importamos el creador de roles 
 import {
     createRoles
@@ -18,6 +20,17 @@ createRoles();
 
 //Asignamos el pkg a una variable
 app.set('pkg', pkg);
+
+
+
+//Agregar al acceso al CORS 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method, x-access-token');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+    next();
+});
 
 //usamor morgan middlawere para controlar nuestra aplicacion
 app.use(morgan('dev'));
@@ -37,6 +50,9 @@ app.get('/', (req, res) => {
 
 //Usamos las rutas para utentificar los usuarios
 app.use('/auth', AuthRoute);
+
+//importamos las rutas de los usuarios
+app.use('/user', UserRoute);
 
 //Aprender Express Validations
 export default app;
