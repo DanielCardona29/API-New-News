@@ -34,7 +34,7 @@ export default class UserController {
     async findUserByID(req, res, next) {
         try {
             console.log(req.userid);
-            const userFound = await User.findOne({ _id: req.userid }, {pass: 0, _id: 0}).populate("roles");
+            const userFound = await User.findOne({ _id: req.userid }, { pass: 0, _id: 0 }).populate("roles");
             if (!userFound) {
                 return _ErrorController.AuthErrorResponse(res, 1001)
             }
@@ -43,4 +43,5 @@ export default class UserController {
             return _ErrorController.AuthErrorResponse(res, 'default')
         }
     };
+
 }

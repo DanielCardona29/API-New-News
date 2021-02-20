@@ -1,13 +1,18 @@
 //Importamos nuestra lista de errores  de los autenticadores
 import { authErrorList } from '../libs/auth.error';
 import { TokenErrorList } from '../libs/token.error';
+import { NewsErrorList } from '../libs/news.error';
 import { validationResult } from 'express-validator';
 
+
 export default class ErrorController {
+
     constructor() {
         this.ErroList = authErrorList;
         this._TokenErrorList = TokenErrorList;
+        this.NewsErrorList = NewsErrorList;
     }
+
     //Aqui se manejan todos los estados de error y las respuestas que le damos al usuario
     AuthErrorResponse(res, code) {
         switch (code) {
@@ -47,6 +52,7 @@ export default class ErrorController {
                 });
         }
     }
+
     //Errrores especificos del registro de usuario
     AuthErrorResponseSignup(res, code) {
         switch (code) {
@@ -119,9 +125,7 @@ export default class ErrorController {
         next();
     }
 
-
     //Errores de validacion del token
-
     TokenValidationResponse(res, code) {
         switch (code) {
             case 2000:
@@ -140,6 +144,62 @@ export default class ErrorController {
                     value: this._TokenErrorList._2001.value
                 });
 
+            default:
+                return res.status(this.ErroList.default.status).json({
+                    message: this.ErroList.default.message,
+                    method: this.ErroList.default.method,
+                    code: this.ErroList.default.code,
+                    value: this.ErroList.default.value
+                });
+        }
+    }
+
+    //Control de errores de las noticias 
+    NewsErrorsResponse(res, code, cb) {
+        switch (code) {
+            case 3000:
+                return res.status(this.NewsErrorList._3000.status).json({
+                    message: this.NewsErrorList._3000.message,
+                    method: this.NewsErrorList._3000.method,
+                    code: this.NewsErrorList._3000.code,
+                    value: this.NewsErrorList._3000.value
+                });
+
+            case 3001:
+                return res.status(this.NewsErrorList._3001.status).json({
+                    message: this.NewsErrorList._3001.message,
+                    method: this.NewsErrorList._3001.method,
+                    code: this.NewsErrorList._3001.code,
+                    value: this.NewsErrorList._3001.value
+                });
+            case 3003:
+                return res.status(this.NewsErrorList._3003.status).json({
+                    message: this.NewsErrorList._3003.message,
+                    method: this.NewsErrorList._3003.method,
+                    code: this.NewsErrorList._3003.code,
+                    value: this.NewsErrorList._3003.value
+                });
+            case 3004:
+                return res.status(this.NewsErrorList._3004.status).json({
+                    message: this.NewsErrorList._3004.message,
+                    method: this.NewsErrorList._3004.method,
+                    code: this.NewsErrorList._3004.code,
+                    value: this.NewsErrorList._3004.value
+                });
+            case 3005:
+                return res.status(this.NewsErrorList._3005.status).json({
+                    message: this.NewsErrorList._3005.message,
+                    method: this.NewsErrorList._3005.method,
+                    code: this.NewsErrorList._3005.code,
+                    value: this.NewsErrorList._3005.value
+                });
+            case 3008:
+                return res.status(this.NewsErrorList._3008.status).json({
+                    message: this.NewsErrorList._3008.message,
+                    method: this.NewsErrorList._3008.method,
+                    code: this.NewsErrorList._3008.code,
+                    value: this.NewsErrorList._3008.value
+                });
             default:
                 return res.status(this.ErroList.default.status).json({
                     message: this.ErroList.default.message,

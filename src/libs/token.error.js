@@ -14,5 +14,4 @@ export const TokenErrorList = {
         status: 400
     }
 
-
 }

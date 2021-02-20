@@ -17,8 +17,6 @@ class AuthController {
     //Inciar sesion
     async signIn(req, res) {
         const { user, pass } = req.body;
-
-        console.log(req.body);
         //Validamos que recibimos los datos
         if (user, pass) {
 
@@ -51,7 +49,6 @@ class AuthController {
     //Registrarse
     async signUp(req, res) {
         const { user, email, pass, roles } = req.body;
-        console.log(req.body);
         //Primero verificamos los datos que recibimos los datos necesarios
         if (!user || !email || !pass) {
             return _ErrorController.AuthErrorResponse(res, 1003)

@@ -10,6 +10,10 @@ import AuthRoute from './routes/auth.routes';
 
 //importamos las rutas de los usuarios
 import UserRoute from './routes/user.routes';
+
+//importamos las rutas de las noticias 
+
+import NewsRoutes from './routes/news.routes';
 //Importamos el creador de roles 
 import {
     createRoles
@@ -53,6 +57,9 @@ app.use('/auth', AuthRoute);
 
 //importamos las rutas de los usuarios
 app.use('/user', UserRoute);
+
+//Usamos las rutas de las noticias
+app.use('/news', NewsRoutes);
 
 //Aprender Express Validations
 export default app;
