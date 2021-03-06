@@ -27,5 +27,16 @@ router.post('/public', [_TokenController.verifyToken], _NewsController.publisher
 //Eliminar una noticia
 router.delete('/delete/?:id', [_TokenController.verifyToken], _NewsController.delete);
 
+//Enviar un dislike a una noticia
+router.post('/liker', [_TokenController.verifyToken], _NewsController.likeDislikeController);
+
+//Crear un comentario
+router.post('/comment', [_TokenController.verifyToken], _NewsController.comment);
+
+//Encontrar todas las noticias publicas
+router.get('/', [_TokenController.verifyToken], _NewsController.allFind);
+
+
+
 
 export default router;

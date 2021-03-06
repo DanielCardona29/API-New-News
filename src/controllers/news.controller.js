@@ -2,12 +2,14 @@ import User from '../models/User.js';
 import News from '../models/News.js';
 import ErrorController from './error.controller';
 import Main from './main.controller';
+import unique from 'uniqid';
 
 const _ErrorController = new ErrorController();
 const _Main = new Main();
 
 export default class NewsController {
-    constructor() { };
+    constructor() {
+    };
     //Esta funcion extrae la informacion de una noticia
     async Find(req, res, next) {
         //Controlamos el error que hacemos 
@@ -20,11 +22,11 @@ export default class NewsController {
             }
 
             //Si tenemos el id los buscamos en la base de datos
-            const news = await News.findById(id);
+            const news = await News.findById(id)
+                .populate('userid', { pass: 0 })
             if (!news) {
                 return _ErrorController.NewsErrorsResponse(res, 3005);
             }
-
             const response = {
                 _id: news._id,
                 content: news.content,
@@ -32,7 +34,8 @@ export default class NewsController {
                 img: news.img,
                 aling: news.aling,
                 userid: news.userid,
-                viwes: news.viwes,
+                views: news.viwes,
+
                 coments: {
                     count: news.coments.length,
                     content: news.coments,
@@ -41,12 +44,14 @@ export default class NewsController {
                 update_date: news.updatedAt,
                 isPublic: news.isPublic,
                 likes: {
+                    isUserLike: _Main.finder(news.likes.userslist, req.userid),
                     count: news.likes.userslist.length,
                     userslist: [
                         ...news.likes.userslist
                     ]
                 },
                 dislikes: {
+                    isUserLike: _Main.finder(news.dislikes.userslist, req.userid),
                     count: news.dislikes.userslist.length,
                     userslist: [
                         ...news.dislikes.userslist
@@ -91,6 +96,7 @@ export default class NewsController {
             aling: aling || 'center',
             isPublic: false,
             userid: req.userid,
+
         });
 
         //Guardamos la noticia
@@ -238,6 +244,154 @@ export default class NewsController {
         }
     }
 
+    //Esta funcion controla si el usuario esta enviando un like o un dislike
+    async likeDislikeController(req, res, next) {
+        try {
+            //Extraemos la info de la noticia
+            const {
+                id,
+                isLiking,
+                isDisliking
+            } = req.body;
+
+            //Comprobar si tenemos el id de la noticia
+            if (!id) {
+                return _ErrorController.NewsErrorsResponse(res, 3004)
+            }
+            //Buscamos la noticia que queremos 
+            let findNew = await News.findById(id);
+
+            //Si estamos dando like verificamos que el usurio no tenga uun dislike
+            if (isLiking) {
+                let dislikes = findNew.dislikes.userslist;
+                const index = dislikes.indexOf(req.userid);
+                //--//
+                console.log(index);
+                if (index !== -1) {
+                    //--//
+                    const consulta = await _Main.dislikes(req, res, next);
+                    //--//
+                    if (!consulta.value) {
+                        //--//
+                        return res.status(204).json({ value: false });
+                        //--//
+                    }
+                    //--//
+                }
+                //--//
+                const consult = _Main.like(req, res, next);
+                const response = await consult;
+                //Enviamos nuestra respuesta
+                if (response.value) {
+                    return res.status(200).json({ value: true, isLiked: response.isLiked, isDisliked: false });
+                } else {
+                    return _ErrorController.NewsErrorsResponse(res, 'default')
+                }
+            }
+
+
+            //Si estamos enviando un dislike
+            if (isDisliking) {
+                let likes = findNew.likes.userslist;
+                const index = likes.indexOf(req.userid);
+                ///--///
+                if (index !== -1) {
+                    const consulta = await _Main.like(req, res, next);
+                    ///--///
+                    if (!consulta.value) {
+                        return res.status(204).json({ value: false });
+                    }
+                    ///--///
+                }
+                ///--///
+                const consult = _Main.dislikes(req, res, next);
+                const response = await consult;
+                //Enviamos nuestra respuesta
+                if (response.value) {
+                    return res.status(200).json({ value: true, isLiked: false, isDisliked: response.isDisliked });
+                } else {
+                    return _ErrorController.NewsErrorsResponse(res, 'default')
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+            return _ErrorController.NewsErrorsResponse(res, 'default')
+        }
+    }
+
+    //Crear un comentario en una noticia 
+    async comment(req, res, next) {
+        //Guardamos la noticia
+        try {
+            const {
+                content,
+                newID
+            } = req.body;
+            //Comprobar si tenemos el contenido
+            if (!content) {
+                return _ErrorController.NewsErrorsResponse(res, 3000)
+            }
+            //Verificamos si tenemos el id de la noticia
+            if (!newID) {
+                return _ErrorController.NewsErrorsResponse(res, 3004)
+            }
+
+            //Buscamos si nuestra noticia existe en la base de datos y comparamos el id del Usuario
+            let findNew = await News.findById(newID);
+            //Comparamos el id que recibimos por el que tiene nuestra noticia
+            const compareID = _Main.compare(findNew.userid, req.userid);
+            if (!compareID) {
+                return _ErrorController.NewsErrorsResponse(res, 3008)
+            }
+            console.log(findNew);
+            const updatedNew = {
+                coments: [
+                    ...findNew.coments,
+                    {
+                        likes: {
+                            userslist: [
+
+                            ]
+                        },
+                        _id: unique(),
+                        content,
+                        userid: req.userid
+                    }]
+
+            }
+            await News.findByIdAndUpdate(newID, updatedNew);
+            findNew = await News.findById(newID);
+            return res.status(200).json({ value: true, ID: newID, response: findNew });
+        } catch (error) {
+            console.log(error);
+            return _ErrorController.NewsErrorsResponse(res, 3003)
+        }
+    }
+
+    //Find all news
+    async allFind(req, res, next) {
+        //Controlamos el error que hacemos 
+        try {
+            //Si tenemos el id los buscamos en la base de datos
+            const news = await News.find({
+                isPublic: true
+            })
+                .populate('userid', { pass: 0 })
+            if (!news) {
+                return _ErrorController.NewsErrorsResponse(res, 3005);
+            }
+
+            //Enviamos nuestra noticia
+            return res.status(200).json({
+                news
+            });
+
+        } catch (error) {
+            console.log(error);
+            return _ErrorController.NewsErrorsResponse(res, 'default');
+        }
+    }
 }
 
 

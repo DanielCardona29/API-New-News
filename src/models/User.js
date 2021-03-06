@@ -21,6 +21,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     }),
+    avatar: ({
+        type: String,
+        required: true
+    }),
     // Los roles provienen de la base de datos 
     // La cual estamos relacionando
     roles: [{

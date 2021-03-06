@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import Role from '../models/Role.js';
-
+import News from '../models/News';
 import ErrorController from './error.controller';
 
 const _ErrorController = new ErrorController();
@@ -33,7 +33,6 @@ export default class UserController {
     //Encontrar un usuario por id
     async findUserByID(req, res, next) {
         try {
-            console.log(req.userid);
             const userFound = await User.findOne({ _id: req.userid }, { pass: 0, _id: 0 }).populate("roles");
             if (!userFound) {
                 return _ErrorController.AuthErrorResponse(res, 1001)
@@ -43,5 +42,67 @@ export default class UserController {
             return _ErrorController.AuthErrorResponse(res, 'default')
         }
     };
+
+    //Encontrar todas las noticias que ha escrito un usario
+    async findUserNews(req, res, next) {
+        try {
+            const Newsfound = await News.find({ userid: req.userid });
+            console.log(Newsfound);
+            if(!Newsfound){
+                return _ErrorController.UserErrorController(res, 4003);
+            }
+            return res.status(200).json(Newsfound)
+        } catch (error) {
+            return _ErrorController.AuthErrorResponse(res, 'default')
+
+        }
+    }
+
+    //Actualizar el avatar de un usuario
+    async avatar(req, res, next) {
+        try {
+
+            const {
+                avatar
+            } = req.body;
+
+            console.log(req.body);
+
+            //Error al no tenen un avatar
+            if (!avatar) {
+                return _ErrorController.UserErrorController(res, 4001);
+            }
+            //Buscamos el usuario en la base de datos y lo actualizamos
+            await User.findByIdAndUpdate(req.userid, { avatar: avatar });
+            const user = await User.findById(req.userid)
+            return res.status(200).json({ value: true, user });
+        } catch (error) {
+            return _ErrorController.UserErrorsResponse(res, 3003)
+        }
+    }
+
+    //Actualizar la contraseña
+    async passChanger(req, res, next) {
+        try {
+            //Capturamos los datos
+            const {
+                newpass
+            } = req.body;
+            //Si tenemos la nueva contraseña
+
+            if (!newpass) {
+                return _ErrorController.UserErrorController(res, 4002);
+
+            }
+
+            //Enpriptamos la contraseña
+            const Crypted_Pass = await User.cryptPass(newpass)
+            //Buscamos el usuario en la base de datos y lo actualizamos
+            const user = await User.findByIdAndUpdate(req.userid, { pass: Crypted_Pass });
+            return res.status(200).json({ value: true, user });
+        } catch (error) {
+            return _ErrorController.UserErrorController(res, 3003)
+        }
+    }
 
 }

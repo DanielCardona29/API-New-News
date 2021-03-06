@@ -7,8 +7,8 @@ const NewsSchema = new Schema({
     title: String,
     viwes: Number,
     userid: {
+        type: Schema.Types.ObjectId,
         ref: 'User',
-        type: Schema.Types.ObjectId
     },
     likes: {
         userslist: [{
@@ -24,9 +24,10 @@ const NewsSchema = new Schema({
     },
     coments: [
         {
+            _id: String,
             userid: {
+                type: Schema.Types.ObjectId,
                 ref: 'User',
-                type: Schema.Types.ObjectId
             },
             content: String,
             likes: {

@@ -3,11 +3,13 @@ import { authErrorList } from '../libs/auth.error';
 import { TokenErrorList } from '../libs/token.error';
 import { NewsErrorList } from '../libs/news.error';
 import { validationResult } from 'express-validator';
+import { userErrorList } from '../libs/user.error';
 
 
 export default class ErrorController {
 
     constructor() {
+        this.userErrorList = userErrorList;
         this.ErroList = authErrorList;
         this._TokenErrorList = TokenErrorList;
         this.NewsErrorList = NewsErrorList;
@@ -206,6 +208,53 @@ export default class ErrorController {
                     method: this.ErroList.default.method,
                     code: this.ErroList.default.code,
                     value: this.ErroList.default.value
+                });
+        }
+    }
+
+
+    //Controlador de errores de los usuarios
+    UserErrorController(res, code, cb) {
+
+        switch (code) {
+            case 4000:
+                return res.status(this.userErrorList._4000.status).json({
+                    message: this.userErrorList._4000.message,
+                    method: this.userErrorList._4000.method,
+                    code: this.userErrorList._4000.code,
+                    value: this.userErrorList._4000.value
+                });
+
+            case 4001:
+                return res.status(this.userErrorList._4001.status).json({
+                    message: this.userErrorList._4001.message,
+                    method: this.userErrorList._4001.method,
+                    code: this.userErrorList._4001.code,
+                    value: this.userErrorList._4001.value
+                });
+
+            case 4002:
+                return res.status(this.userErrorList._4002.status).json({
+                    message: this.userErrorList._4002.message,
+                    method: this.userErrorList._4002.method,
+                    code: this.userErrorList._4002.code,
+                    value: this.userErrorList._4002.value
+                });
+
+            case 4003:
+                return res.status(this.userErrorList._4003.status).json({
+                    message: this.userErrorList._4003.message,
+                    method: this.userErrorList._4003.method,
+                    code: this.userErrorList._4003.code,
+                    value: this.userErrorList._4003.value
+                });
+
+            default:
+                return res.status(this.userErrorList.default.status).json({
+                    message: this.userErrorList.default.message,
+                    method: this.userErrorList.default.method,
+                    code: this.userErrorList.default.code,
+                    value: this.userErrorList.default.value
                 });
         }
     }

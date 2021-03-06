@@ -19,7 +19,6 @@ class AuthController {
         const { user, pass } = req.body;
         //Validamos que recibimos los datos
         if (user, pass) {
-
             const userFound = await _UserController.userFounder(user);
             //Primero validamos el que usuairo no exista en la base de datos
             if (!userFound) {
@@ -71,6 +70,7 @@ class AuthController {
         const NewUser = new User({
             user,
             email,
+            avatar: 'https://censur.es/wp-content/uploads/2019/03/default-avatar.png',
             pass: await User.cryptPass(pass)
         });
 
