@@ -3,7 +3,6 @@
 import app from './app.js';
 import './database.js';
 import dotenv from 'dotenv'
-
 //Configuramos las variables de entorno
 dotenv.config();
 //Abrimos el puerto de nustra aplicacion
