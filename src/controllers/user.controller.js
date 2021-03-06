@@ -1,11 +1,11 @@
-import User from '../models/User.js';
-import Role from '../models/Role.js';
-import News from '../models/News';
-import ErrorController from './error.controller';
+const User = require('../models/User.js')
+const Role = require('../models/Role.js')
+const News = require('../models/News')
+const ErrorController = require('./error.controller')
 
 const _ErrorController = new ErrorController();
 
-export default class UserController {
+class UserController {
     constructor() { };
 
     //Extraemos Toda la lista de usuarios que tenemos 
@@ -48,7 +48,7 @@ export default class UserController {
         try {
             const Newsfound = await News.find({ userid: req.userid });
             console.log(Newsfound);
-            if(!Newsfound){
+            if (!Newsfound) {
                 return _ErrorController.UserErrorController(res, 4003);
             }
             return res.status(200).json(Newsfound)
@@ -106,3 +106,5 @@ export default class UserController {
     }
 
 }
+
+module.exports = UserController

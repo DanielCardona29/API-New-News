@@ -1,12 +1,11 @@
 //Importamos el modulo del Router de expres
-import { Router } from 'express';
+const { Router } = require('express');
 //Validadores
-import { body, validationResult } from 'express-validator';
-
+const { body, validationResult } = require('express-validator');
 //Importamos el controlador de los usuarios
-import AuthController from '../controllers/auth.controller';
-import ErrorController from '../controllers/error.controller';
-import TokenController from '../controllers/token.controller';
+const AuthController = require('../controllers/auth.controller');
+const ErrorController = require('../controllers/error.controller');
+const TokenController = require('../controllers/token.controller');
 
 const _TokenController = new TokenController();
 const _ErrorController = new ErrorController();
@@ -29,4 +28,4 @@ router.post('/tokenValidation', _TokenController.verifyToken, (req, res) => {
     return res.status(200).json({ value: true })
 })
 
-export default router;
+module.exports = router;

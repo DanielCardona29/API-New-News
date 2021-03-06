@@ -1,5 +1,5 @@
-import News from '../models/News.js';
-import User from '../models/User.js';
+const News = require('../models/News.js');
+const User = require('../models/User.js');
 
 class Main {
     //Coparador de elementos
@@ -110,4 +110,4 @@ class Main {
 }
 
 
-export default Main;
+module.exports = Main;

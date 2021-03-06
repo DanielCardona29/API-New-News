@@ -1,12 +1,11 @@
 //Importamos nuestra lista de errores  de los autenticadores
-import { authErrorList } from '../libs/auth.error';
-import { TokenErrorList } from '../libs/token.error';
-import { NewsErrorList } from '../libs/news.error';
-import { validationResult } from 'express-validator';
-import { userErrorList } from '../libs/user.error';
+const authErrorList = require('../libs/auth.error');
+const TokenErrorList = require('../libs/token.error');
+const NewsErrorList = require('../libs/news.error');
+const validationResult = require('express-validator');
+const userErrorList = require('../libs/user.error');
 
-
-export default class ErrorController {
+class ErrorController {
 
     constructor() {
         this.userErrorList = userErrorList;
@@ -259,3 +258,6 @@ export default class ErrorController {
         }
     }
 }
+
+
+module.exports = ErrorController;

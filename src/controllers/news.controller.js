@@ -1,13 +1,13 @@
-import User from '../models/User.js';
-import News from '../models/News.js';
-import ErrorController from './error.controller';
-import Main from './main.controller';
-import unique from 'uniqid';
+const User = require('../models/User.js')
+const News = require('../models/News.js')
+const ErrorController = require('./error.controller')
+const Main = require('./main.controller')
+const unique = require('uniqid')
 
 const _ErrorController = new ErrorController();
 const _Main = new Main();
 
-export default class NewsController {
+class NewsController {
     constructor() {
     };
     //Esta funcion extrae la informacion de una noticia
@@ -395,3 +395,6 @@ export default class NewsController {
 }
 
 
+
+
+module.exports = NewsController

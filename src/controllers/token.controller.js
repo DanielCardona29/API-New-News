@@ -1,9 +1,9 @@
 //Importamos la libreria del token
-import jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken');
 //Importamos nuestro config
-import config from '../config.js';
-import User from '../models/User';
-import ErrorController from './error.controller';
+const config = require('../config.js');
+const User = require('../models/User');
+const ErrorController = require('./error.controller');
 
 const _ErrorController = new ErrorController();
 
@@ -56,4 +56,4 @@ class TokenController {
 
 }
 
-export default TokenController;
+module.exports = TokenController;

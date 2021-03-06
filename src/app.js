@@ -1,23 +1,21 @@
 // babel convierte el codigo de js moderno a codigo soportado por node
-import express from 'express';
+const express = require('express')
 //importamos el middlawere de morgan
-import morgan from 'morgan';
+const morgan = require('morgan')
 //Importamos el pakage json
-import pkg from '../package.json';
+const pkg = require('../package.json')
 
 //Importamos las rutas de los Usuarios}
-import AuthRoute from './routes/auth.routes';
+const AuthRoute = require('./routes/auth.routes')
 
 //importamos las rutas de los usuarios
-import UserRoute from './routes/user.routes';
+const UserRoute = require('./routes/user.routes')
 
 //importamos las rutas de las noticias 
 
-import NewsRoutes from './routes/news.routes';
+const NewsRoutes = require('./routes/news.routes')
 //Importamos el creador de roles 
-import {
-    createRoles
-} from './libs/roles.libs';
+const createRoles = require('./libs/roles.libs');
 //Iniciamos express
 const app = express();
 createRoles();
@@ -62,4 +60,4 @@ app.use('/user', UserRoute);
 app.use('/news', NewsRoutes);
 
 //Aprender Express Validations
-export default app;
+module.exports = app;

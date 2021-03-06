@@ -1,4 +1,4 @@
-export const NewsErrorList = {
+module.exports = NewsErrorList = {
     _3000: {
         message: `Para guardar la noticia se necesita el contenido`,
         method: 'News creator',

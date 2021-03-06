@@ -1,10 +1,9 @@
 //Conectamos a la base de datos
-import dontenv from 'dotenv';
+const dontenv = require('dotenv')
 dontenv.config()
-
-import mongoose from 'mongoose';
+const mongoose = require('mongoose')
 const CONNECTION_STRING = process.env.CONNECTION_STRING
-mongoose.connect(CONNECTION_STRING, {
+const connection = mongoose.connect(CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     // para solucionar el error de "DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead."
@@ -19,3 +18,5 @@ mongoose.connect(CONNECTION_STRING, {
     .catch(err => {
         console.log(`Error al conectar la base de datos: ${err}`);
     });
+
+module.exports = connection;

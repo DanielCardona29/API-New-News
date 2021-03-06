@@ -1,7 +1,7 @@
 //En este Libs creamos los roles por defecto
-import Role from '../models/Role.js';
+const Role = require('../models/Role.js');
 
-export const createRoles = async() => {
+module.exports = createRoles = async () => {
     try {
         const contador = await Role.estimatedDocumentCount();
 

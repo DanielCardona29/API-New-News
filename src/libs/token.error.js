@@ -1,4 +1,4 @@
-export const TokenErrorList = {
+module.exports = TokenErrorList = {
     _2000: {
         message: `El token es invalido`,
         method: 'Authentication token',

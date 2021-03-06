@@ -1,11 +1,11 @@
-import User from '../models/User';
+const User = require('../models/User')
 //Importamos el modelo de los roles
-import Role from '../models/Role.js';
+const Role = require('../models/Role.js')
 
 //Importamos nuestros controladores
-import UserController from './user.controller'
-import TokenController from './token.controller'
-import ErrorController from './error.controller'
+const UserController = require('./user.controller')
+const TokenController = require('./token.controller')
+const ErrorController = require('./error.controller')
 
 const _UserController = new UserController();
 const _TokenController = new TokenController();
@@ -117,4 +117,4 @@ class AuthController {
 
 };
 
-export default AuthController;
+module.exports = AuthController;

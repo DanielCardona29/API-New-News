@@ -1,5 +1,5 @@
 // Hacemos un Schema para el manejo de los Roles
-import { Schema, model } from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const RoleSchema = new Schema({
     name: String
@@ -7,4 +7,4 @@ const RoleSchema = new Schema({
     versionKey: false
 });
 
-export default model('Role', RoleSchema);
+module.exports = model('Role', RoleSchema);

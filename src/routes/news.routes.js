@@ -1,10 +1,10 @@
 //Importamos el modulo del Router de expres
-import { Router } from 'express';
+const { Router } = require('express')
 
 //Importamos el controlador de los usuarios
-import UserController from '../controllers/user.controller';
-import TokenController from '../controllers/token.controller';
-import NewsController from '../controllers/news.controller';
+const UserController = require('../controllers/user.controller')
+const TokenController = require('../controllers/token.controller')
+const NewsController = require('../controllers/news.controller')
 
 const _NewsController = new NewsController();
 const _TokenController = new TokenController();
@@ -39,4 +39,4 @@ router.get('/', [_TokenController.verifyToken], _NewsController.allFind);
 
 
 
-export default router;
+module.exports = router;

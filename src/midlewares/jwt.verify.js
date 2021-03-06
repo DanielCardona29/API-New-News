@@ -1,12 +1,12 @@
 //Importamos el jwt
-import jwt from 'jsonwebtoken';
-import config from '../config.js';
-import User from '../models/User.js';
-import Role from '../models/Role.js';
+const jwt = require('jsonwebtoken')
+const config = require('../config.js')
+const User = require('../models/User.js')
+const Role = require('../models/Role.js')
 
 
 //Aqui se valida si el token es valido
-export const verifyToken = async(req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     const token = req.headers['x-access-token'];
     //Validamos la cabezera
 
@@ -25,7 +25,7 @@ export const verifyToken = async(req, res, next) => {
         const user = await User.findById(req.userid, { pass: 0 });
         //Si el id no existe reentornammos
         if (!user) return res.status(404).json({ message: 'no user found' })
-            //Si todo esta correcto continuamos
+        //Si todo esta correcto continuamos
         next();
     } catch (error) {
         //Si el token no existe reentornnamos el error
@@ -37,7 +37,7 @@ export const verifyToken = async(req, res, next) => {
 };
 
 //Aqui validamos si el usuario es un moderador
-export const isModerator = async(req, res, next) => {
+export const isModerator = async (req, res, next) => {
     //Controlamos un posible error
     try {
         //Guardamos el id del usuario en una constante
@@ -66,7 +66,7 @@ export const isModerator = async(req, res, next) => {
 
 
 //Aqui validamos si el usuario es un moderador
-export const isAdmin = async(req, res, next) => {
+export const isAdmin = async (req, res, next) => {
     //Controlamos un posible error
     try {
         //Guardamos el id del usuario en una constante

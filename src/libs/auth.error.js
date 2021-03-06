@@ -1,4 +1,4 @@
-export const authErrorList = {
+module.exports = authErrorList = {
     default: {
         message: `Error desconocido, intente nuevamente`,
         method: 'Authentication',

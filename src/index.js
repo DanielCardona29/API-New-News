@@ -1,8 +1,8 @@
 "use strict";
 // desde este archivo arrancamos la aplicacion
-import app from './app.js';
-import './database.js';
-import dotenv from 'dotenv'
+const app = require('./app.js')
+const connection = require('./database.js')
+const dotenv = require('dotenv')
 //Configuramos las variables de entorno
 dotenv.config();
 //Abrimos el puerto de nustra aplicacion
