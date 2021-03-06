@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "jest --watch",
-        "start": "babel-node src/index.js",
+        "start": "node ./src/index.js",
         "dev": "nodemon src/index.js --exec babel-node",
         "dev2": "nodemon src/index.js",
         "build": "babel src --out-dir dist"
