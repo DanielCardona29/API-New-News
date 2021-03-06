@@ -2,7 +2,7 @@
 const authErrorList = require('../libs/auth.error');
 const TokenErrorList = require('../libs/token.error');
 const NewsErrorList = require('../libs/news.error');
-const validationResult = require('express-validator');
+const { validationResult } = require('express-validator');
 const userErrorList = require('../libs/user.error');
 
 class ErrorController {
