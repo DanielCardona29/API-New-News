@@ -1,7 +1,9 @@
 //Conectamos a la base de datos
+import dontenv from 'dotenv';
+dontenv.config()
+
 import mongoose from 'mongoose';
-const pass = "1k1bR1CsLxjZRmMP"
-const CONNECTION_STRING = `mongodb+srv://DanielCardona:${pass}@cluster0.vyxcm.mongodb.net/newnewsDB?retryWrites=true&w=majority`
+const CONNECTION_STRING = process.env.CONNECTION_STRING
 mongoose.connect(CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
