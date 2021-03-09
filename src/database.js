@@ -3,7 +3,6 @@ const dontenv = require('dotenv')
 dontenv.config()
 const mongoose = require('mongoose')
 const CONNECTION_STRING = process.env.CONNECTION_STRING
-console.log(CONNECTION_STRING);
 const connection = mongoose.connect(CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

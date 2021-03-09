@@ -24,7 +24,6 @@ class Main {
     //Esta funcion envia un like a la noticia
     async like(req, res, next) {
         const { id } = req.body;
-        console.log(`este es el like id MainController linea 18 ${id}`);
         //Comprobar si tenemos el id de la noticia
         if (!id) {
             return false;
@@ -63,7 +62,6 @@ class Main {
     //Esta funcion envia un dislikes a la noticia
     async dislikes(req, res, next) {
         const { id } = req.body;
-        console.log(`este es el dislikes id MainController linea 18 ${id}`);
         //Comprobar si tenemos el id de la noticia
         if (!id) {
             return false;

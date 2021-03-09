@@ -12,13 +12,13 @@ module.exports = authErrorList = {
         code: 1001,
         value: false,
         status: 404
-    },
+        },
     _1002: {
         message: `La contraseña del usuario es incorrecta`,
         method: 'Authentication',
         code: 1002,
         value: false,
-        status: 202
+        status: 404
     },
     _1003: {
         message: `La información del usuario esta incompleta`,

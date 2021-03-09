@@ -90,7 +90,7 @@ class NewsController {
         //Creamo el objeto que vamos a guardar
         const NewObject = new News({
             content,
-            viwes: 0,
+            views: 0,
             title,
             img: img || 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png',
             aling: aling || 'center',
@@ -136,7 +136,6 @@ class NewsController {
             const findNew = await News.findById(newID)
             //Comparamos el id que recibimos por el que tiene nuestra noticia
             const compareID = _Main.compare(findNew.userid, req.userid);
-            console.log(compareID);
             if (!compareID) {
                 return _ErrorController.NewsErrorsResponse(res, 3008)
             }
@@ -161,10 +160,10 @@ class NewsController {
         }
     }
 
-    //Esta funcion actualiza la información de una noticia
+    //Esta funcion publicamos  una noticia
     async publisher(req, res, next) {
         const {
-            isPublic,
+
             newID
         } = req.body;
 
@@ -179,7 +178,6 @@ class NewsController {
             const findNew = await News.findById(newID)
             //Comparamos el id que recibimos por el que tiene nuestra noticia
             const compareID = _Main.compare(findNew.userid, req.userid);
-            console.log(compareID);
             if (!compareID) {
                 return _ErrorController.NewsErrorsResponse(res, 3008)
             }
@@ -192,10 +190,48 @@ class NewsController {
         //Guardamos la noticia
         try {
             const updatedNew = {
-                isPublic: isPublic,
+                isPublic: true,
             }
             const SavedNew = await News.findByIdAndUpdate(newID, updatedNew);
 
+            return res.status(200).json({ value: true, ID: newID, response: SavedNew });
+        } catch (error) {
+            return _ErrorController.NewsErrorsResponse(res, 3003)
+        }
+    }
+
+    //Esta funcion despublicamos una noticia
+    async dispublisher(req, res, next) {
+        const {
+            newID
+        } = req.body;
+
+        //Comprobar si tenemos el titulo
+        if (!newID) {
+            return _ErrorController.NewsErrorsResponse(res, 3004)
+        }
+
+        //Verificamos que el usuario sea el que escribió la noticia para guardarlo
+        try {
+            //Buscamos si nuestra noticia existe en la base de datos y comparamos el id del Usuario
+            const findNew = await News.findById(newID)
+            //Comparamos el id que recibimos por el que tiene nuestra noticia
+            const compareID = _Main.compare(findNew.userid, req.userid);
+            if (!compareID) {
+                return _ErrorController.NewsErrorsResponse(res, 3008)
+            }
+        } catch (error) {
+            return _ErrorController.NewsErrorsResponse(res, 'default')
+
+        }
+
+
+        //Guardamos la noticia
+        try {
+            const updatedNew = {
+                isPublic: false,
+            }
+            const SavedNew = await News.findByIdAndUpdate(newID, updatedNew);
             return res.status(200).json({ value: true, ID: newID, response: SavedNew });
         } catch (error) {
             return _ErrorController.NewsErrorsResponse(res, 3003)
@@ -219,7 +255,6 @@ class NewsController {
                     return _ErrorController.NewsErrorsResponse(res, 3005);
                 }
                 const compareID = _Main.compare(findNew.userid, req.userid);
-                console.log(compareID);
                 if (!compareID) {
                     return _ErrorController.NewsErrorsResponse(res, 3008)
                 }
@@ -231,7 +266,6 @@ class NewsController {
             //Eliminamos la noticia
             await News.findByIdAndDelete(id)
                 .then(value => {
-                    console.log(`Se ha eliminado la noticia ${id} de manera satifactoria`);
                     return res.status(200).json({
                         message: `Se ha eliminado satisfactoriamente la noticia`,
                         value: true
@@ -266,7 +300,6 @@ class NewsController {
                 let dislikes = findNew.dislikes.userslist;
                 const index = dislikes.indexOf(req.userid);
                 //--//
-                console.log(index);
                 if (index !== -1) {
                     //--//
                     const consulta = await _Main.dislikes(req, res, next);
@@ -344,7 +377,6 @@ class NewsController {
             if (!compareID) {
                 return _ErrorController.NewsErrorsResponse(res, 3008)
             }
-            console.log(findNew);
             const updatedNew = {
                 coments: [
                     ...findNew.coments,
@@ -390,6 +422,25 @@ class NewsController {
         } catch (error) {
             console.log(error);
             return _ErrorController.NewsErrorsResponse(res, 'default');
+        }
+    }
+
+
+    //Enviar los views 
+    async view(req, res, next) {
+        const { newID } = req.body
+        //Verificamos que el usuario sea el que escribió la noticia para guardarlo
+        try {
+            //Buscamos si nuestra noticia existe en la base de datos y comparamos el id del Usuario
+            const findNew = await News.findById(newID)
+            //Comparamos el id que recibimos por el que tiene nuestra noticia
+            const updatedNew = {
+                views: findNew.views + 1
+            }
+            await News.findByIdAndUpdate(newID, updatedNew);
+            return res.status(200).json({ value: true });
+        } catch (error) {
+            return _ErrorController.NewsErrorsResponse(res, 3003)
         }
     }
 }

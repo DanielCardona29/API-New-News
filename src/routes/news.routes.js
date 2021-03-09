@@ -24,6 +24,9 @@ router.post('/update', [_TokenController.verifyToken], _NewsController.update);
 //Publicar una noticia
 router.post('/public', [_TokenController.verifyToken], _NewsController.publisher);
 
+//dDespublicar
+router.post('/dispublic', [_TokenController.verifyToken], _NewsController.dispublisher);
+
 //Eliminar una noticia
 router.delete('/delete/?:id', [_TokenController.verifyToken], _NewsController.delete);
 
@@ -36,7 +39,8 @@ router.post('/comment', [_TokenController.verifyToken], _NewsController.comment)
 //Encontrar todas las noticias publicas
 router.get('/', [_TokenController.verifyToken], _NewsController.allFind);
 
-
+//Encontrar todas las noticias publicas
+router.post('/view', [_TokenController.verifyToken], _NewsController.view);
 
 
 module.exports = router;

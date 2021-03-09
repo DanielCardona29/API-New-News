@@ -5,7 +5,7 @@ const NewsSchema = new Schema({
     content: String,
     img: String,
     title: String,
-    viwes: Number,
+    views: Number,
     userid: {
         type: Schema.Types.ObjectId,
         ref: 'User',

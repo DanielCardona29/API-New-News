@@ -11,7 +11,6 @@ class UserController {
     //Extraemos Toda la lista de usuarios que tenemos 
     async findUsersList(req, res) {
         const users = await User.find({ name: { $type: 2 } }, { pass: 0, id: 0, createdAt: 0, updatedAt: 0 }).populate('roles', { _id: 0 });
-        console.log(users);
         res.status(200).json(users)
     }
     //validar que un nombre de usuario exista en las bases de datos
@@ -47,7 +46,6 @@ class UserController {
     async findUserNews(req, res, next) {
         try {
             const Newsfound = await News.find({ userid: req.userid });
-            console.log(Newsfound);
             if (!Newsfound) {
                 return _ErrorController.UserErrorController(res, 4003);
             }
@@ -66,7 +64,6 @@ class UserController {
                 avatar
             } = req.body;
 
-            console.log(req.body);
 
             //Error al no tenen un avatar
             if (!avatar) {

@@ -13,6 +13,6 @@ module.exports = createRoles = async () => {
             new Role({ name: 'moderator' }).save()
         ]).then(values => console.log(values));
     } catch (error) {
-        console.log('values');
+        console.log(error);
     }
 }
